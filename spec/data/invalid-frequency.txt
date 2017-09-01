@@ -1,0 +1,1 @@
+znap: foo: Invalid frequency - expecting: hourly|daily|weekly|monthly

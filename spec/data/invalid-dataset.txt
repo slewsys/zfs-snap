@@ -1,0 +1,2 @@
+znap: c0: Invalid ZFS dataset
+znap: c1: Invalid ZFS dataset

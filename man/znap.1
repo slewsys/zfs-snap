@@ -1,0 +1,151 @@
+.\"
+.\"	@(#)znap
+.\"
+.Dd August 30, 2017
+.Dt ZNAP 1
+.Os
+.Sh NAME
+.Nm znap
+.Nd ZFS snapshot manager
+.Sh SYNOPSIS
+.Nm znap
+.Op Fl h | \-help
+.Nm znap
+.Op Fl nr
+.Fl c | \-create Ns Op = Ns Ar frequency Ns , Ns Ar lifespan
+.Ar dataset ...
+.Nm znap
+.Op Fl nr
+.Fl d | \-destroy
+.Ar regex ...
+.Nm znap
+.Op Fl nr
+.Fl e | \-expire
+.Op Ar regex ...
+.Nm znap
+.Op Fl nr
+.Fl l | \-list
+.Op Ar regex ...
+.Sh DESCRIPTION
+The
+.Nm
+command-line utility builds upon the
+.Nm Zfs::Snap
+Ruby library for creating, destroying,
+expiring and listing ZFS snapshots.
+.Pp
+Snapshots are named in the format:
+.Em dataset Ns @ Ns Em frequency Ns - Ns Em timestamp Ns -- Ns Em  lifespan Ns ,
+where
+.Pp
+.Bl -bullet
+.It
+.Em  dataset
+is the name of an existing ZFS filesystem.
+.It
+.Em frequnecy
+indicates how often these snapshots are created.
+Its value is one of:
+.Em hourly ,
+.Em daily ,
+.Em weekly ,
+.Em montly .
+.It
+.Em timestamp
+is an
+.St -iso8601
+UTC timestamp indicating the shapshot's date of
+creation. Its value in
+.Xr strftime 3
+format is:
+.Em %Y%m%d Ns T Ns Em %H%M%s Ns z .
+.It
+.Em lifespan
+is the time interval between snapshot creation and expiration.
+Its value in
+.Xr regex 3
+format:
+.Em [[:digit]][dwmyHMS] .
+.El
+.Pp
+Options are as follows:
+.Bl -tag -width Fl
+.It Fl h | \-help
+Show this message, then exit.
+.It Fl c | \-create Ns Op = Ns Ar frequency Ns , Ns Ar lifespan
+For each
+.Em dataset
+given, create snapshot named per specified
+.Em frequency
+and
+.Em lifespan .
+If option arguments are not specified,
+they default to:
+.Ar hourly Ns , Ns Ar 2w .
+.It Fl d | \-destroy
+Destroy snapshots matching regular expressions
+.Em regex ... No .
+At least one regular expression must be provided to protect against
+inadvertenly destroying all snapshots.
+.It Fl e | \-expire
+Destroy expired snapshots optionally matching regular expressions
+.Op Ar regex ... No .
+If no regular expression is specified, then all expired shapshots
+are destroyed.
+.It Fl l | \-list
+List snapshots optionally matching regular expressions
+.Op Ar regex ... No .
+If no regular expression is specified, then all shapshots
+are listed.
+.It Fl n | \-no-execute
+When combined with one of the flags
+.Fl c ,
+.Fl d , No or
+.Fl e ,
+display commands that would be executed,
+but don't actually execute them.
+.It Fl r | \-recursively
+When combined with one of the flags
+.Fl c ,
+.Fl d ,
+.Fl e , No or
+.Fl l ,
+recursively act on any children of the dataset.
+.It Fl V | \-version
+Show version, then exit.
+.It Fl v | \-verbose
+Report diagnostics.
+.El
+.Sh Examples
+.Xr crontab 5
+entries to implment automatic snapshot creation and expiration with
+.Nm
+might look like:
+.Bd -literal
+# Remove extraneous snapshots hourly.
+13 6-22 * * * root znap -d -r /usr/obj /var/cache /var/tmp
+# Remove expired snapshots daily.
+ 0    6 * * * root znap -e
+
+# Create hourly snapshots from 6 AM to 10 PM lasting 2 weeks
+12 6-22 * * * root znap -chourly,2w  -r zroot/ROOT/default zroot/usr
+12 6-22 * * * root znap -chourly,2w  -r zroot/var zroot/opt
+# Create daily snapshots lasting 3 months
+ 6    5 * * * root znap -cdaily,3m   -r zroot/ROOT/default zroot/usr
+ 6    5 * * * root znap -cdaily,3m   -r zroot/var zroot/opt
+# Create weekly snapshots lasting 13 months.
+ 7    6 * * 0 root znap -cweekly,13m -r zroot/ROOT/default zroot/usr
+ 7    6 * * 0 root znap -cweekly,13m -r zroot/var zroot/opt
+# Create monthly snapshots lasting 2 years.
+ 8    7 1 * * root znap -cmonthly,2y -r zroot/ROOT/default zroot/usr
+ 8    7 1 * * root znap -cmonthly,2y -r zroot/var zroot/opt
+
+.Ed
+.Sh SEE ALSO
+.Xr zfs 8 ,
+.Xr zpool 8 ,
+.Xr cron 8 ,
+.Xr crontab 5 ,
+.Xr zfs-auto-snapshot 8 .
+.Sh BUGS
+ZFS pool status is no checked prior to take snapshots.
