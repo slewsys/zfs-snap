@@ -149,7 +149,9 @@ module Zfs
         result = IO.suppress do
           system(*command) if !request[:no_exec]
         end
-        respond "#{name}: create%s" % [result ? 'd' : ' failed'] if !request[:no_exec]
+        respond "#{name}: create%s" %
+          [result ? 'd' : ' failed',
+           request[:recursively] ? ' (recursively)' : ''] if !request[:no_exec]
       end
 
       def destroy(request)
@@ -160,7 +162,9 @@ module Zfs
         result = IO.suppress do
           system(*command) if !request[:no_exec]
         end
-        respond "#{name}: destroy%s" % [result ? 'ed' : ' failed'] if !request[:no_exec]
+        respond "#{name}: destroy%s%s" %
+          [result ? 'ed' : ' failed',
+           request[:recursively] ? ' (recursively)' : ''] if !request[:no_exec]
       end
     end
   end

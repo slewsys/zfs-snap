@@ -4,7 +4,23 @@ require 'zfs/snap'
 $script_name = 'znap'
 
 def znap(*args)
-  system 'bundle', 'exec', 'exe/znap', *args
+  system 'sudo', 'bundle', 'exec', "exe/#{$script_name}", *args
+end
+
+# Return hash of the form { 'mountpoint' => 'zfs_dataset' }.
+def zfs_mounted_datasets
+  IO.popen([Zfs::ZFS, 'list', '-H'], err: [:child, :out]) do |io|
+    io.readlines.map do |line|
+      params = line.split
+      [params[-1], params[0]]
+    end.to_h
+  end
+end
+
+# Return list of ZFS datasets whose mountpoints are in $test_mnts.
+def zfs_test_datasets
+  mnts = zfs_mounted_datasets
+  mnts.keys.map { |key| $test_mnts.include?(key) ?  mnts[key] : nil }.compact
 end
 
 def invalid_zpool
