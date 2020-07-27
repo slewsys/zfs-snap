@@ -101,7 +101,7 @@ EOF
   end
 end
 
-  # Local variables:
-  # Mode: enh-ruby-mode
-  # coding: utf-8-unix
-  # End:
+# Local variables:
+# Mode: ruby
+# coding: utf-8-unix
+# End:

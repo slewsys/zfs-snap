@@ -43,6 +43,6 @@ module Console
 end
 
 # Local variables:
-# Mode: enh-ruby-mode
+# Mode: ruby
 # coding: utf-8-unix
 # End:

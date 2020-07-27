@@ -14,18 +14,49 @@ where
 * TIMESTAMP is an ISO 8601 UTC timestamp indicating the snapshot's
   date of creation. Its value in strftime(3) format: `%Y%m%d`T`%H%M%S%`z.
 
-* LIFESPAN is the time interval between snapshot creation and expiration. Its value in regex(3) format: `[[:digit]]+[dwmyHMS]`.
+* LIFESPAN is the time interval between snapshot creation and
+  expiration. Its value in regex(3) format: `[[:digit]]+[dwmyHMS]`,
+  e.g., `2w` indicates two weeks and `2m` two months.
 
 Command-line utility, `znap` (described below), is intended to be run
-from `cron(8)` periodically for creating snapshots and destroying
+from `cron(8)` for periodically creating snapshots and destroying
 expired ones.
 
 ## System Requirements
 
-A ZFS filesystem, of course, `ruby(1)` script interpreter, version 2.x
+A ZFS filesystem, a recent version of the
+[Ruby](https://www.ruby-lang.org/en/) interpreter (e.g., ruby 2.5)
 and, for automatic snapshot rotation, `cron(8)`.
 
-For development/testing, Ruby test framework `Rspec` version 3.6.
+For development/testing, Ruby test framework `Rspec` version 3.9.
+
+## Installation
+Run the following commands from a Unix shell:
+
+```bash
+git clone https://github.com/slewsys/zfs-snap.git
+cd ./zfs-snap
+sudo gem update --system
+bundle
+rake build
+sudo gem install pkg/clean_rm*.gem
+```
+
+Prior to running the RSpec test suite,
+edit the file *spec/zfs/snap_spec.rb* and change the line at the top
+of the file:
+
+```ruby
+$test_mnts =   ['/test1', '/test2', '/test3']
+```
+
+Replace `/test1`, `/test2`, `/test3` with locally mounted ZFS filesystems for
+which test snapshots can be created and destroyed. The testsuite can
+then be run as:
+
+```bash
+bundle exec rspec spec
+```
 
 ## Command-line Interface
 

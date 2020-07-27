@@ -25,6 +25,11 @@ module Zfs
 
   class <<self
     def snapshot?(dataset)
+
+      # Work around Linux ZFS issue where the command:
+      #     zfs list -type snapshot dataset
+      # succeeds if dataset exists but is not a snapshot.
+      return false if dataset.index('@').nil?
       IO.suppress($stdout, $stderr) do
         system ZFS, 'list', '-t', 'snapshot', dataset
       end
@@ -170,9 +175,7 @@ module Zfs
   end
 end
 
-
-
 # Local variables:
-# Mode: enh-ruby-mode
+# Mode: ruby
 # coding: utf-8-unix
 # End:
