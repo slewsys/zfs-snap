@@ -9,7 +9,7 @@ end
 
 # Return hash of the form { 'mountpoint' => 'zfs_dataset' }.
 def zfs_mounted_datasets
-  IO.popen([Zfs::ZFS, 'list', '-H'], err: [:child, :out]) do |io|
+  IO.popen([ZFS::ZFS_PATH, 'list', '-H'], err: [:child, :out]) do |io|
     io.readlines.map do |line|
       params = line.split
       [params[-1], params[0]]

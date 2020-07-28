@@ -6,13 +6,13 @@ $test_mnts =   ['/znapool/test1', '/znapool/test2', '/znapool/test3']
 require 'spec_helper'
 require 'zfs/snap/cli'
 
-RSpec.describe Zfs::Snap do
+RSpec.describe ZFS::Snap do
   let(:mounted_datasets) { zfs_mounted_datasets }
   let(:test_datasets) { zfs_test_datasets }
 
   context 'command-line options' do
     it 'prints a version number' do
-      expect { znap '-V' }.to output_string('Znap ' + Zfs::Snap::VERSION)
+      expect { znap '-V' }.to output_string('Znap ' + ZFS::Snap::VERSION)
     end
 
     it 'summarizes usage if no arguments' do

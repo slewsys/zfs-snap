@@ -5,7 +5,7 @@ require "zfs/snap/version"
 
 Gem::Specification.new do |spec|
   spec.name          = "zfs-snap"
-  spec.version       = Zfs::Snap::VERSION
+  spec.version       = ZFS::Snap::VERSION
   spec.authors       = ["Andrew L. Moore"]
   spec.email         = ["slewsys@gmail.com"]
 

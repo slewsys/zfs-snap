@@ -6,31 +6,31 @@ require 'zfs/snap/cli'
 $script_name = File.basename(__FILE__)
 $err_status = 0
 
-cli = Zfs::Snap::CLI.new
+cli = ZFS::Snap::CLI.new
 datasets = cli.parse_opts(ARGV)
 request = cli.option
 
 if !request[:create].empty? && !datasets.empty?
   datasets.each do |dataset|
-    snapshot = Zfs::Snap::Dataset.new(dataset, params: request[:create])
+    snapshot = ZFS::Snap::Dataset.new(dataset, params: request[:create])
     snapshot.create(request) if snapshot.name
   end
 elsif request[:destroy] && !datasets.empty?
   pattern = datasets.join('|')
 
-  Zfs::Snap.scan(pattern).each do |snapshot|
+  ZFS::Snap.scan(pattern).each do |snapshot|
     snapshot.destroy(request)
   end
 elsif request[:expire]
   pattern = datasets.empty? ? '.*' : datasets.join('|')
 
-  Zfs::Snap.scan(pattern).each do |snapshot|
+  ZFS::Snap.scan(pattern).each do |snapshot|
     snapshot.destroy(request) if snapshot.expired?
   end
 elsif request[:list]
   pattern = datasets.empty? ? '.*' : datasets.join('|')
 
-  Zfs::Snap.scan(pattern).each do |snapshot|
+  ZFS::Snap.scan(pattern).each do |snapshot|
     puts snapshot.name
   end
 else

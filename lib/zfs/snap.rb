@@ -19,9 +19,9 @@ class IO
 end
 
 # When converted to int, time zone converted to UTC automatically.
-module Zfs
+module ZFS
 
-  ZFS = '/sbin/zfs'
+  ZFS_PATH = '/sbin/zfs'
 
   class <<self
     def snapshot?(dataset)
@@ -31,13 +31,13 @@ module Zfs
       # succeeds if dataset exists but is not a snapshot.
       return false if dataset.index('@').nil?
       IO.suppress($stdout, $stderr) do
-        system ZFS, 'list', '-t', 'snapshot', dataset
+        system ZFS_PATH, 'list', '-t', 'snapshot', dataset
       end
     end
 
     def dataset?(dataset)
       IO.suppress($stdout, $stderr) do
-        system ZFS, 'list', dataset
+        system ZFS_PATH, 'list', dataset
       end
     end
 
@@ -75,7 +75,7 @@ module Zfs
 
     class <<self
       def each
-        IO.popen([ZFS, 'list', '-H', '-t', 'snapshot'],
+        IO.popen([ZFS_PATH, 'list', '-H', '-t', 'snapshot'],
                  :err => [:child, :out]) do |io|
           io.readlines.map { |line| line.split[0] }.each do |snapshot|
             yield Dataset.new(snapshot)
@@ -84,7 +84,7 @@ module Zfs
       end
 
       def scan(pattern)
-        IO.popen([ZFS, 'list', '-H', '-t', 'snapshot'],
+        IO.popen([ZFS_PATH, 'list', '-H', '-t', 'snapshot'],
                  :err => [:child, :out]) do |io|
           io.readlines.map { |line| line.split[0] }.map do |snapshot|
             Dataset.new(snapshot) if snapshot =~ /#{pattern}/
@@ -127,7 +127,7 @@ module Zfs
         # Include ui_module to expose `respond' and `error' methods...
          self.class.include(Object.const_get ui_module)
 
-        case Zfs.type_of? dataset
+        case ZFS.type_of? dataset
         when :snapshot
           @name = dataset
         when :dataset
@@ -147,7 +147,7 @@ module Zfs
       end
 
       def create(request)
-        command = [ZFS, 'snap']
+        command = [ZFS_PATH, 'snap']
         command.append '-r' if request[:recursively]
         command.append name
         respond command.join(' ') if  request[:verbose]
@@ -160,7 +160,7 @@ module Zfs
       end
 
       def destroy(request)
-        command = [ZFS, 'destroy']
+        command = [ZFS_PATH, 'destroy']
         command.append '-r' if request[:recursively]
         command.append name
         respond command.join(' ') if  request[:verbose]

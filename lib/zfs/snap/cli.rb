@@ -2,7 +2,7 @@ require 'optparse'
 require 'zfs/snap/version'
 require 'zfs/snap/ui_console'
 
-module Zfs
+module ZFS
   module Snap
     class CLI
       attr_reader :option

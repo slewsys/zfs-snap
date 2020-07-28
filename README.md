@@ -1,8 +1,8 @@
 [![Build Status](https://travis-ci.com/slewsys/zfs-snap.svg?branch=master)](https://travis-ci.com/slewsys/zfs-snap)
 
-# Zfs::Snap
+# ZFS::Snap
 
-__Zfs::Snap__ is a Ruby library for managing ZFS snapshots.
+__ZFS::Snap__ is a Ruby library for managing ZFS snapshots.
 
 Snapshots are named in the format:  `DATASET`@`FREQUENCY`-`TIMESTAMP`--`LIFESPAN`,
 
