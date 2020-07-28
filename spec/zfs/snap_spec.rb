@@ -1,7 +1,7 @@
 # $test_mnts is assumed to be a list of ZFS filesystem mountpoints
 # safe for testing creation and deletion of snapshots.
 # NB: It must be defined before requiring 'spec_helper'.
-$test_mnts =   ['/test1', '/test2', '/test3']
+$test_mnts =   ['/znapool/test1', '/znapool/test2', '/znapool/test3']
 
 require 'spec_helper'
 require 'zfs/snap/cli'

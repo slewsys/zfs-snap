@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/slewsys/zfs-snap.svg?branch=master)](https://travis-ci.com/slewsys/zfs-snap)
+
 # Zfs::Snap
 
 __Zfs::Snap__ is a Ruby library for managing ZFS snapshots.
@@ -47,12 +49,12 @@ edit the file *spec/zfs/snap_spec.rb* and change the line at the top
 of the file:
 
 ```ruby
-$test_mnts =   ['/test1', '/test2', '/test3']
+$test_mnts =   ['/znapool/test1', '/znapool/test2', '/znapool/test3']
 ```
 
-Replace `/test1`, `/test2`, `/test3` with locally mounted ZFS filesystems for
-which test snapshots can be created and destroyed. The testsuite can
-then be run as:
+Replace `/znapool/test1`, `/znapool/test2`, `/znapool/test3` with
+locally mounted ZFS filesystems for which test snapshots can be
+created and destroyed. Then the testsuite can then be run as:
 
 ```bash
 bundle exec rspec spec

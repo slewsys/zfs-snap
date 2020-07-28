@@ -1,5 +1,17 @@
-sudo: false
+dist: bionic
 language: ruby
 rvm:
-  - 2.5.0
-before_install: gem install bundler -v 1.15.4
+  - 2.7.0
+before_install:
+  - sudo gem install bundler
+  - sudo ln -s $(which bundle) /usr/bin/
+  - sudo apt-get install -y zfsutils-linux
+  - sudo mkdir /znapool
+  - dd if=/dev/zero of=znap.pool bs=100M seek=1 count=0
+  - sudo /sbin/zpool create znapool $(pwd)/znap.pool
+  - sudo /sbin/zfs set mountpoint=/znapool znapool
+  - sudo /sbin/zfs create znapool/test1
+  - sudo /sbin/zfs create znapool/test2
+  - sudo /sbin/zfs create znapool/test3
+script:
+  - bundle exec rspec spec
