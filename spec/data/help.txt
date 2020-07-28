@@ -4,24 +4,32 @@ Usage: znap -h | --help
        znap [-nr] -e | --expire [REGEX ...]
        znap [-nr] -l | --list [REGEX ...]"
 Options:
-    -h, --help         Show this message, then exit.
-    -c[FREQ,SPAN],     For each dataset given, create snapshot named per
-                       specified FREQUENCY and LIFESPAN. If option arguments
-                       are not specified, they default to: hourly,2w.
-        --create
-    -d, --destroy      Destroy snapshots matching regular expressions REGEX ...
-                       At least one regular expression must be provided to
-                       protect against inadvertently destroying all snapshots.
-    -e, --expire       Destroy expired snapshots matching regular expressions
-                       REGEX ... . If no regular expression is specified,
-                       then all expired snapshots are destroyed.
-    -l, --list         List snapshots matching regular expressions REGEX ...
-                       If no regular expression is specified, then all
-                       snapshots are listed.
-    -n, --no-execute   When combined with one of the flags -c, -d or -e,
-                       display commands that would be executed, but
-                       don't actually execute them.
-    -r, --recursively  When combined with one of the flags -c, -d, -e, or -l,
-                       recursively act on any children of the dataset.
-    -V, --version      Show version, then exit.
-    -v, --verbose      Report diagnostics.
+    In the following, REGEX is an extended regular expression per Regexp.
+    
+    -h, --help               
+              Show this message, then exit.
+    -c, --create[=FREQ,SPAN] 
+              For each dataset given, create snapshot named per specified
+              FREQUENCY and LIFESPAN. If no option arguments are given,
+              they default to: hourly,2w.
+    -d, --destroy            
+              Destroy snapshots matching regular expressions REGEX ...
+              At least one regular expression must be provided to
+              protect against inadvertently destroying all snapshots.
+    -e, --expire             
+              Destroy expired snapshots matching regular expressions REGEX ...
+              If no regular expression is given, then all expired snapshots
+              are destroyed.
+    -l, --list               
+              List snapshots matching regular expressions REGEX ... If no
+              regular expression is given, then all snapshots are listed.
+    -n, --no-execute         
+              When combined with one of the flags -c, -d or -e, display
+              commands that would be executed, but don't actually execute them.
+    -r, --recursively        
+              When combined with one of the flags -c, -d, -e, or -l,
+              recursively act on any children of the dataset.
+    -V, --version            
+              Show version, then exit.
+    -v, --verbose            
+              Report diagnostics.
