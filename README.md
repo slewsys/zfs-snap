@@ -27,10 +27,10 @@ expired ones.
 ## System Requirements
 
 A ZFS filesystem, a recent version of the
-[Ruby](https://www.ruby-lang.org/en/) interpreter (e.g., ruby 2.5)
+[Ruby](https://www.ruby-lang.org/en/) interpreter (e.g., ruby 2.7)
 and, for automatic snapshot rotation, `cron(8)`.
 
-For development/testing, Ruby test framework `Rspec` version 3.9.
+For development/testing, Ruby test framework `Rspec` version 3.10.
 
 ## Installation
 Run the following commands from a Unix shell:
@@ -41,7 +41,7 @@ cd ./zfs-snap
 sudo gem update --system
 bundle
 rake build
-sudo gem install pkg/clean_rm*.gem
+sudo gem install pkg/zfs-snap*.gem
 ```
 
 Prior to running the RSpec test suite,
