@@ -20,8 +20,14 @@ end
 
 # When converted to int, time zone converted to UTC automatically.
 module ZFS
-
-  ZFS_PATH = '/sbin/zfs'
+  ZFS_PATH = case RbConfig::CONFIG['host_os']
+             when /linux/, /freebsd/
+               '/sbin/zfs'
+             when /solaris/
+               '/usr/sbin/zfs'
+             else
+               nil
+             end
 
   class <<self
     def snapshot?(dataset)
@@ -174,8 +180,3 @@ module ZFS
     end
   end
 end
-
-# Local variables:
-# Mode: ruby
-# coding: utf-8-unix
-# End:

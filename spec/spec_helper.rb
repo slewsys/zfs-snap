@@ -2,14 +2,16 @@ require 'bundler/setup'
 require 'zfs/snap'
 
 $script_name = 'znap'
+mounted_datasets = nil
+test_datasets = nil
 
 def znap(*args)
-  system 'sudo', 'bundle', 'exec', "exe/#{$script_name}", *args
+  system 'bundle', 'exec', "exe/#{$script_name}", *args
 end
 
 # Return hash of the form { 'mountpoint' => 'zfs_dataset' }.
 def zfs_mounted_datasets
-  IO.popen([ZFS::ZFS_PATH, 'list', '-H'], err: [:child, :out]) do |io|
+  mounted_datasets ||= IO.popen([ZFS::ZFS_PATH, 'list', '-H'], err: [:child, :out]) do |io|
     io.readlines.map do |line|
       params = line.split
       [params[-1], params[0]]
@@ -19,8 +21,7 @@ end
 
 # Return list of ZFS datasets whose mountpoints are in $test_mnts.
 def zfs_test_datasets
-  mnts = zfs_mounted_datasets
-  mnts.keys.map { |key| $test_mnts.include?(key) ?  mnts[key] : nil }.compact
+  test_datasets ||= zfs_mounted_datasets.values & $test_mnts
 end
 
 def invalid_zpool

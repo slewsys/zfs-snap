@@ -7,7 +7,6 @@ require 'spec_helper'
 require 'zfs/snap/cli'
 
 RSpec.describe ZFS::Snap do
-  let(:mounted_datasets) { zfs_mounted_datasets }
   let(:test_datasets) { zfs_test_datasets }
 
   context 'command-line options' do
