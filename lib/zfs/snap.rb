@@ -36,6 +36,7 @@ module ZFS
       #     zfs list -type snapshot dataset
       # succeeds if dataset exists but is not a snapshot.
       return false if dataset.index('@').nil?
+
       IO.suppress($stdout, $stderr) do
         system ZFS_PATH, 'list', '-t', 'snapshot', dataset
       end
@@ -126,7 +127,6 @@ module ZFS
 
     class Dataset
       attr_reader :name
-      attr_reader :request
 
       def initialize(dataset, params: DEFAULTS, ui_module: :Console)
 
