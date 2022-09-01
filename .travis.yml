@@ -1,7 +1,7 @@
-dist: bionic
+dist: jammy
 language: ruby
 rvm:
-  - 2.7.0
+  - 3.1.2
 before_install:
   - sudo gem install bundler
   - sudo ln -s $(which bundle) /usr/bin/

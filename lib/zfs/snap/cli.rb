@@ -1,33 +1,42 @@
+# frozen_string_literal: true
+
 require 'optparse'
 require 'zfs/snap/version'
 require 'zfs/snap/ui_console'
 
+##
+# Module ZFS
 module ZFS
+  ##
+  # Module ZFS::Snap
   module Snap
+    ##
+    # Class ZFS::Snap::CLI
     class CLI
       attr_reader :option
 
       def initialize(option = {})
         @option =
           {
-           create:      {},
-           destroy:     false,
-           expire:      false,
-           list:        false,
-           recursively: false,
-           verbose:     false,
+            create: {},
+            destroy: false,
+            expire: false,
+            list: false,
+            recursively: false,
+            verbose: false
           }.merge(option)
       end
 
       def parse_opts(argv)
         parser = OptionParser.new(nil, 24) do |opts|
-          opts.banner = <<EOF
+          opts.banner = <<-EOF.freeze
 Usage: #{$script_name} -h | --help
        #{$script_name} [-nr] -c | --create[=FREQ,SPAN] DATASET ...
        #{$script_name} [-nr] -d | --destroy REGEX ...
        #{$script_name} [-nr] -e | --expire [REGEX ...]
        #{$script_name} [-nr] -l | --list [REGEX ...]"
-EOF
+          EOF
+
           opts.separator 'Options:
     In the following, REGEX is an extended regular expression per Regexp.
     '
@@ -92,16 +101,11 @@ EOF
 
         begin
           parser.parse(argv)
-        rescue ArgumentError, StandardError => err
-          $stderr.puts "#{$script_name}: #{err.message}"
+        rescue ArgumentError => e
+          $stderr.puts "#{$script_name}: #{e.message}"
           exit $err_status
         end
       end
     end
   end
 end
-
-# Local variables:
-# Mode: ruby
-# coding: utf-8-unix
-# End:
